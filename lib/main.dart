@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import './api/cities.dart';
+import 'cities/city.dart' as cityWidget;
 
 // Travel Log App
 void main() {
@@ -53,20 +54,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var cities = getCities();
+  late Future<List<City>> citiesFuture;
 
-  Future<Response> fetchAlbum() {
-    return get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'))
-        .then((value) {
-      print(value.body);
-      return value;
-    });
+  @override
+  void initState() {
+    super.initState();
+    citiesFuture = getCities();
   }
 
   void _incrementCounter() {
-    var json = getCities().;
-
-    Map<String, dynamic> user = jsonDecode(jsonString);
-    var name = user['user]['name'];
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -85,36 +82,36 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            FutureBuilder<List<City>>(
+              future: citiesFuture,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.active:
+                  case ConnectionState.waiting:
+                    return const CircularProgressIndicator();
+                  case ConnectionState.done:
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      var data = snapshot.data!;
+                      return Expanded(
+                        child: ListView(
+                            children: data
+                                .map((e) =>
+                                    cityWidget.City(e.id, e.name, e.country))
+                                .toList()),
+                      );
+                    }
+                  default:
+                    return const Text("something odd happened 🤨");
+                }
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            // https://source.unsplash.com/featured/?
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
