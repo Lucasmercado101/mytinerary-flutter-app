@@ -1,8 +1,9 @@
+import 'package:first_app/pages/home_page.dart';
+import 'package:first_app/router.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import './api/cities.dart';
-import 'cities/city.dart' as cityWidget;
 
 // Travel Log App
 void main() {
@@ -29,78 +30,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  var cities = getCities();
-  late Future<List<City>> citiesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    citiesFuture = getCities();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            FutureBuilder<List<City>>(
-              future: citiesFuture,
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.active:
-                  case ConnectionState.waiting:
-                    return const CircularProgressIndicator();
-                  case ConnectionState.done:
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      var data = snapshot.data!;
-                      return Expanded(
-                        child: ListView(
-                            children: data
-                                .map((e) =>
-                                    cityWidget.City(e.id, e.name, e.country))
-                                .toList()),
-                      );
-                    }
-                  default:
-                    return const Text("something odd happened 🤨");
-                }
-              },
-            ),
-            // https://source.unsplash.com/featured/?
-          ],
-        ),
-      ),
+      home: HomePage(),
+      initialRoute: "/",
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
