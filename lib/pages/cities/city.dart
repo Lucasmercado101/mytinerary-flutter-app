@@ -1,3 +1,4 @@
+import 'package:first_app/pages/city/city.dart';
 import 'package:flutter/material.dart';
 
 class City extends StatelessWidget {
@@ -13,7 +14,9 @@ class City extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: () => {Navigator.pushNamed(context, '/cities/$id')},
+      onPressed: () => {
+        Navigator.pushNamed(context, '/cities', arguments: CityArguments(id))
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(
           vertical: 10.0,
