@@ -6,42 +6,46 @@ class City extends StatelessWidget {
   final String country;
 
   // constructor
-  City(this.id, this.name, this.country);
+  const City(
+      {Key? key, required this.id, required this.name, required this.country})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: 10.0,
-        horizontal: 20.0,
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
+    return MaterialButton(
+      onPressed: () => {Navigator.pushNamed(context, '/cities/$id')},
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+          vertical: 10.0,
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
                   ),
-                ),
-                Text(
-                  country,
-                  style: TextStyle(
-                    color: Colors.grey[500],
+                  Text(
+                    country,
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Icon(
-            Icons.chevron_right,
-            size: 30.0,
-          ),
-        ],
+            const Icon(
+              Icons.chevron_right,
+              size: 30.0,
+            ),
+          ],
+        ),
       ),
     );
   }

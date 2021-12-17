@@ -44,8 +44,12 @@ class _CitiesPageState extends State<CitiesPage> {
                       return Expanded(
                         child: ListView(
                             children: data
-                                .map((e) =>
-                                    cityWidget.City(e.id, e.name, e.country))
+                                .map(
+                                  (e) => cityWidget.City(
+                                      id: e.id,
+                                      name: e.name,
+                                      country: e.country),
+                                )
                                 .toList()),
                       );
                     }
