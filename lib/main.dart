@@ -1,9 +1,6 @@
 import 'package:first_app/pages/home_page.dart';
 import 'package:first_app/router.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
-import './api/cities.dart';
 
 // Travel Log App
 void main() {
@@ -29,6 +26,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
       ),
       home: HomePage(),
       initialRoute: "/",
